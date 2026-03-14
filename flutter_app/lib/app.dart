@@ -92,7 +92,7 @@ class _BottomNav extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A2E).withOpacity(0.95),
+        color: const Color(0xFF0B1026).withOpacity(0.95),
         border: Border(
           top: BorderSide(color: Colors.white.withOpacity(0.08)),
         ),

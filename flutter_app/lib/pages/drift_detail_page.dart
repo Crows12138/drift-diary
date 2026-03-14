@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../widgets/ambient_background.dart';
+import '../widgets/ocean_background.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/mood_badge.dart';
 import '../providers/drift_provider.dart';
@@ -35,8 +35,7 @@ class DriftDetailPage extends ConsumerWidget {
         final mood = bottle.moodTag;
         final color = AppTheme.moodColor(mood);
 
-        return AmbientBackground.mood(
-          mood: mood,
+        return OceanBackground(
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../widgets/ambient_background.dart';
+import '../widgets/ocean_background.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/mood_badge.dart';
 import '../providers/drift_provider.dart';
@@ -81,12 +81,7 @@ class _DriftPageState extends ConsumerState<DriftPage> {
   Widget build(BuildContext context) {
     final myBottles = ref.watch(myBottlesProvider);
 
-    return AmbientBackground(
-      orbs: const [
-        AmbientOrb(color: Color(0xFF4D96FF), x: 0.3, y: 0.15, radius: 0.4),
-        AmbientOrb(color: Color(0xFF7C83FD), x: 0.75, y: 0.35, radius: 0.35),
-        AmbientOrb(color: Color(0xFFE2B0FF), x: 0.4, y: 0.7, radius: 0.3),
-      ],
+    return OceanBackground(
       child: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => ref.read(myBottlesProvider.notifier).refresh(),

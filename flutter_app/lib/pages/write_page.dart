@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../widgets/ambient_background.dart';
+import '../widgets/ocean_background.dart';
 import '../widgets/glass_card.dart';
 import '../providers/diary_provider.dart';
 import '../services/api_service.dart';
@@ -78,7 +78,7 @@ class _WritePageState extends ConsumerState<WritePage> {
 
   @override
   Widget build(BuildContext context) {
-    return AmbientBackground.home(
+    return OceanBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../widgets/ambient_background.dart';
+import '../widgets/ocean_background.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/mood_badge.dart';
 import '../providers/auth_provider.dart';
@@ -16,12 +16,7 @@ class MinePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final diariesAsync = ref.watch(diaryListProvider);
 
-    return AmbientBackground(
-      orbs: const [
-        AmbientOrb(color: Color(0xFFE2B0FF), x: 0.25, y: 0.15, radius: 0.4),
-        AmbientOrb(color: Color(0xFF7C83FD), x: 0.7, y: 0.3, radius: 0.35),
-        AmbientOrb(color: Color(0xFFF472B6), x: 0.4, y: 0.65, radius: 0.3),
-      ],
+    return OceanBackground(
       child: SafeArea(
         child: CustomScrollView(
           slivers: [

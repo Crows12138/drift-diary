@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../widgets/ambient_background.dart';
+import '../widgets/ocean_background.dart';
 import '../widgets/glass_card.dart';
+import '../widgets/floating_card.dart';
 import '../widgets/mood_badge.dart';
 import '../providers/diary_provider.dart';
 import '../theme/app_theme.dart';
@@ -26,7 +27,7 @@ class HomePage extends ConsumerWidget {
     const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
     final dateStr = '${now.month}月${now.day}日 星期${weekdays[now.weekday - 1]}';
 
-    return AmbientBackground.home(
+    return OceanBackground(
       child: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => ref.read(diaryListProvider.notifier).refresh(),
@@ -61,7 +62,7 @@ class HomePage extends ConsumerWidget {
 
               // Write diary button
               SliverToBoxAdapter(
-                child: GlassCard(
+                child: FloatingCard(
                   margin: const EdgeInsets.fromLTRB(16, 20, 16, 0),
                   onTap: () => context.push('/write'),
                   child: Row(

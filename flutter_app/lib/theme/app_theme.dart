@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  static const _bg = Color(0xFF0F0F1A);
-  static const _surface = Color(0xFF1A1A2E);
-  static const _primary = Color(0xFF7C83FD);
-  static const _secondary = Color(0xFFE2B0FF);
+  // Ocean palette
+  static const _bg = Color(0xFF0B1026);
+  static const _surface = Color(0xFF142850);
+  static const _primary = Color(0xFF5BB8A9);    // seafoam teal
+  static const _secondary = Color(0xFFF4C95D);  // warm lantern amber
 
   static final dark = ThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: _bg,
+    scaffoldBackgroundColor: Colors.transparent, // let ocean show through
     colorScheme: const ColorScheme.dark(
       surface: _surface,
       primary: _primary,
@@ -18,7 +19,6 @@ class AppTheme {
       onPrimary: Colors.white,
       onSurface: Colors.white,
     ),
-    // fontFamily: 'Noto', // Uncomment after adding Noto Sans SC fonts
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -72,7 +72,7 @@ class AppTheme {
   static Color moodColor(String mood) {
     return switch (mood) {
       'happy' => const Color(0xFFFFD93D),
-      'calm' => const Color(0xFF6BCB77),
+      'calm' => const Color(0xFF5BB8A9),
       'anxious' => const Color(0xFFFF8C32),
       'sad' => const Color(0xFF4D96FF),
       'angry' => const Color(0xFFFF6B6B),

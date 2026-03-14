@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../widgets/ambient_background.dart';
+import '../widgets/ocean_background.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/mood_badge.dart';
 import '../theme/app_theme.dart';
@@ -39,8 +39,7 @@ class AiResultPage extends ConsumerWidget {
     final analysis = diary.aiAnalysis;
     final mood = analysis?.mood ?? diary.moodTag;
 
-    return AmbientBackground.mood(
-      mood: mood,
+    return OceanBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
