@@ -1,0 +1,43 @@
+/* 漂流日记 - 深海主题变量 */
+
+/* 背景色 */
+$bg-primary: #0a0e27;
+$bg-secondary: #0f1332;
+$bg-card: #161b40;
+$bg-input: #1a2048;
+
+/* 文字色 */
+$text-primary: #e8ecf4;
+$text-secondary: #8b95b0;
+$text-hint: #4a5270;
+
+/* 强调色 */
+$accent-blue: #7c9cff;
+$accent-purple: #a78bfa;
+$accent-pink: #f472b6;
+$accent-green: #6ee7b7;
+
+/* 心情色 */
+$mood-happy: #fbbf24;
+$mood-calm: #6ee7b7;
+$mood-anxious: #f59e0b;
+$mood-sad: #a78bfa;
+$mood-angry: #ef4444;
+$mood-confused: #94a3b8;
+$mood-grateful: #fb923c;
+
+/* 圆角 */
+$radius-sm: 12rpx;
+$radius-md: 20rpx;
+$radius-lg: 32rpx;
+$radius-full: 999rpx;
+
+/* 保留 uni-app 默认变量 */
+$uni-color-primary: #7c9cff;
+$uni-color-success: #6ee7b7;
+$uni-color-warning: #f59e0b;
+$uni-color-error: #ef4444;
+$uni-text-color: #e8ecf4;
+$uni-text-color-inverse: #0a0e27;
+$uni-text-color-grey: #8b95b0;
+$uni-bg-color: #0a0e27;

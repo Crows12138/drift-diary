@@ -1,0 +1,24 @@
+# 环境变量（含密钥）
+server/.env
+server/drift_diary.db
+server/venv/
+server/__pycache__/
+
+# 前端构建产物
+miniprogram/dist/
+miniprogram/node_modules/
+
+# Flutter
+flutter_app/.dart_tool/
+flutter_app/build/
+
+# Playwright MCP 临时文件
+.playwright-mcp/
+
+# IDE
+.idea/
+*.iml
+
+# 系统文件
+.DS_Store
+Thumbs.db

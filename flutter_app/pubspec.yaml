@@ -1,0 +1,25 @@
+name: drift_diary
+description: AI日记漂流瓶 - 用文字记录心情，让日记在陌生人之间漂流
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.7.0
+  flutter_riverpod: ^2.6.1
+  go_router: ^14.8.1
+  shared_preferences: ^2.3.4
+  intl: ^0.20.2
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
