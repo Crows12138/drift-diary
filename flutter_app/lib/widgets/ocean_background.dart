@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class OceanBackground extends StatefulWidget {
   final Widget child;
@@ -38,54 +39,74 @@ class _OceanBackgroundState extends State<OceanBackground>
 
   @override
   Widget build(BuildContext context) {
+    final isDayMode = Theme.of(context).brightness == Brightness.light;
+    final gradientColors = AppTheme.gradientColors(isDayMode);
+
     return Stack(
       children: [
-        // Sky + Ocean gradient — deeper, more atmospheric
+        // Sky + Ocean gradient
         Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              stops: [0.0, 0.35, 0.5, 0.65, 1.0],
-              colors: [
-                Color(0xFF080E1E), // very deep night
-                Color(0xFF0E1B3D), // deep navy
-                Color(0xFF132D52), // horizon line
-                Color(0xFF0F2440), // upper ocean
-                Color(0xFF091A30), // deep ocean
-              ],
+              stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
+              colors: gradientColors,
             ),
           ),
         ),
 
-        // Stars — very subtle, tiny dots
-        if (widget.showStars) _buildStars(context),
+        // Stars — night only
+        if (!isDayMode && widget.showStars) _buildStars(context),
 
-        // Moonlight reflection on water — a soft vertical glow
-        Positioned(
-          right: 60,
-          top: 0,
-          bottom: 0,
-          width: 120,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: const [0.05, 0.15, 0.5, 0.7, 1.0],
-                colors: [
-                  Colors.transparent,
-                  const Color(0xFFD4E5FF).withOpacity(0.03),
-                  const Color(0xFFD4E5FF).withOpacity(0.015),
-                  const Color(0xFFA8C8E8).withOpacity(0.02),
-                  Colors.transparent,
-                ],
+        // Moonlight reflection — night only
+        if (!isDayMode)
+          Positioned(
+            right: 60,
+            top: 0,
+            bottom: 0,
+            width: 120,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0.05, 0.15, 0.5, 0.7, 1.0],
+                  colors: [
+                    Colors.transparent,
+                    const Color(0xFFD4E5FF).withOpacity(0.03),
+                    const Color(0xFFD4E5FF).withOpacity(0.015),
+                    const Color(0xFFA8C8E8).withOpacity(0.02),
+                    Colors.transparent,
+                  ],
+                ),
               ),
             ),
           ),
-        ),
 
-        // Horizon glow — subtle warm light at the horizon
+        // Sun glow — day only
+        if (isDayMode)
+          Positioned(
+            right: 40,
+            top: 30,
+            width: 180,
+            height: 180,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFFF5F0E0).withOpacity(0.25),
+                    const Color(0xFFF5F0E0).withOpacity(0.08),
+                    Colors.transparent,
+                  ],
+                  stops: const [0.0, 0.4, 1.0],
+                ),
+              ),
+            ),
+          ),
+
+        // Horizon glow
         Positioned(
           left: 0,
           right: 0,
@@ -97,7 +118,9 @@ class _OceanBackgroundState extends State<OceanBackground>
                 center: const Alignment(0.3, 0),
                 radius: 1.5,
                 colors: [
-                  const Color(0xFF2A4A6B).withOpacity(0.15),
+                  isDayMode
+                      ? const Color(0xFFF5F0E0).withOpacity(0.2)
+                      : const Color(0xFF2A4A6B).withOpacity(0.15),
                   Colors.transparent,
                 ],
               ),
@@ -105,7 +128,7 @@ class _OceanBackgroundState extends State<OceanBackground>
           ),
         ),
 
-        // Gentle waves
+        // Layered waves — mountain-ridge style
         AnimatedBuilder(
           animation: _controller,
           builder: (context, _) {
@@ -114,6 +137,7 @@ class _OceanBackgroundState extends State<OceanBackground>
               painter: _WavePainter(
                 animationValue: _controller.value,
                 waveHeight: widget.waveHeight,
+                isDayMode: isDayMode,
               ),
             );
           },
@@ -157,53 +181,20 @@ class _OceanBackgroundState extends State<OceanBackground>
 class _WavePainter extends CustomPainter {
   final double animationValue;
   final double waveHeight;
+  final bool isDayMode;
 
-  _WavePainter({required this.animationValue, required this.waveHeight});
+  _WavePainter({
+    required this.animationValue,
+    required this.waveHeight,
+    required this.isDayMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final phase = animationValue * 2 * pi;
 
-    // 5 ultra-subtle wave layers for depth
-    final layers = <_WaveLayer>[
-      // Furthest back — barely visible
-      _WaveLayer(
-        color: const Color(0xFF1A3555).withOpacity(0.25),
-        amplitude: 4,
-        frequency: 0.8,
-        speed: 0.4,
-        yShift: -8,
-      ),
-      _WaveLayer(
-        color: const Color(0xFF162D48).withOpacity(0.35),
-        amplitude: 5,
-        frequency: 1.0,
-        speed: 0.6,
-        yShift: 0,
-      ),
-      _WaveLayer(
-        color: const Color(0xFF132845).withOpacity(0.45),
-        amplitude: 3.5,
-        frequency: 1.3,
-        speed: 0.8,
-        yShift: 6,
-      ),
-      _WaveLayer(
-        color: const Color(0xFF0F2340).withOpacity(0.55),
-        amplitude: 3,
-        frequency: 1.6,
-        speed: 1.0,
-        yShift: 12,
-      ),
-      // Closest — most opaque
-      _WaveLayer(
-        color: const Color(0xFF0B1D35).withOpacity(0.7),
-        amplitude: 2,
-        frequency: 2.0,
-        speed: 1.2,
-        yShift: 18,
-      ),
-    ];
+    // Mountain-ridge style: 7 layers, back layers with larger amplitude
+    final layers = isDayMode ? _dayLayers() : _nightLayers();
 
     for (final layer in layers) {
       final paint = Paint()
@@ -219,11 +210,14 @@ class _WavePainter extends CustomPainter {
       for (double x = 0; x <= size.width; x += 2) {
         final normalizedX = x / size.width;
         final y = baseY +
-            sin(normalizedX * 2 * pi * layer.frequency + phase * layer.speed) *
+            sin(normalizedX * 2 * pi * layer.frequency +
+                    phase * layer.speed) *
                 layer.amplitude +
             sin(normalizedX * 3 * pi * layer.frequency * 0.7 +
-                    phase * layer.speed * 0.5 + 1.3) *
-                layer.amplitude * 0.4;
+                    phase * layer.speed * 0.5 +
+                    1.3) *
+                layer.amplitude *
+                0.4;
         path.lineTo(x, y);
       }
 
@@ -232,9 +226,13 @@ class _WavePainter extends CustomPainter {
       canvas.drawPath(path, paint);
     }
 
-    // Subtle light shimmer on the top wave edge
+    // Shimmer line on top wave edge
+    final shimmerColor = isDayMode
+        ? const Color(0xFFFFFFFF).withOpacity(0.08)
+        : const Color(0xFFAABBCC).withOpacity(0.04);
+
     final shimmerPaint = Paint()
-      ..color = const Color(0xFFAABBCC).withOpacity(0.04)
+      ..color = shimmerColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8;
 
@@ -253,9 +251,124 @@ class _WavePainter extends CustomPainter {
     canvas.drawPath(shimmerPath, shimmerPaint);
   }
 
+  List<_WaveLayer> _nightLayers() {
+    return [
+      // Back layers — mountain ridges, larger amplitude, slower
+      _WaveLayer(
+        color: const Color(0xFF1A3555).withOpacity(0.2),
+        amplitude: 10,
+        frequency: 0.4,
+        speed: 0.25,
+        yShift: -20,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF173050).withOpacity(0.28),
+        amplitude: 8,
+        frequency: 0.6,
+        speed: 0.35,
+        yShift: -12,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF152B4A).withOpacity(0.35),
+        amplitude: 7,
+        frequency: 0.8,
+        speed: 0.45,
+        yShift: -4,
+      ),
+      // Mid layers
+      _WaveLayer(
+        color: const Color(0xFF132845).withOpacity(0.45),
+        amplitude: 5,
+        frequency: 1.0,
+        speed: 0.6,
+        yShift: 4,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF102340).withOpacity(0.55),
+        amplitude: 4,
+        frequency: 1.3,
+        speed: 0.8,
+        yShift: 10,
+      ),
+      // Front layers — closer, more opaque
+      _WaveLayer(
+        color: const Color(0xFF0D1E38).withOpacity(0.65),
+        amplitude: 3,
+        frequency: 1.6,
+        speed: 1.0,
+        yShift: 16,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF0B1A30).withOpacity(0.75),
+        amplitude: 2,
+        frequency: 2.0,
+        speed: 1.2,
+        yShift: 22,
+      ),
+    ];
+  }
+
+  List<_WaveLayer> _dayLayers() {
+    return [
+      // Back ridges — softer blues
+      _WaveLayer(
+        color: const Color(0xFF5A9FCB).withOpacity(0.15),
+        amplitude: 10,
+        frequency: 0.4,
+        speed: 0.25,
+        yShift: -20,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF4A8FBB).withOpacity(0.2),
+        amplitude: 8,
+        frequency: 0.6,
+        speed: 0.35,
+        yShift: -12,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF3A7FAB).withOpacity(0.28),
+        amplitude: 7,
+        frequency: 0.8,
+        speed: 0.45,
+        yShift: -4,
+      ),
+      // Mid
+      _WaveLayer(
+        color: const Color(0xFF2A6F9B).withOpacity(0.35),
+        amplitude: 5,
+        frequency: 1.0,
+        speed: 0.6,
+        yShift: 4,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF1A5F8B).withOpacity(0.4),
+        amplitude: 4,
+        frequency: 1.3,
+        speed: 0.8,
+        yShift: 10,
+      ),
+      // Front
+      _WaveLayer(
+        color: const Color(0xFF104F7B).withOpacity(0.5),
+        amplitude: 3,
+        frequency: 1.6,
+        speed: 1.0,
+        yShift: 16,
+      ),
+      _WaveLayer(
+        color: const Color(0xFF083D77).withOpacity(0.6),
+        amplitude: 2,
+        frequency: 2.0,
+        speed: 1.2,
+        yShift: 22,
+      ),
+    ];
+  }
+
   @override
   bool shouldRepaint(covariant _WavePainter oldDelegate) =>
-      oldDelegate.animationValue != animationValue;
+      oldDelegate.animationValue != animationValue ||
+      oldDelegate.isDayMode != isDayMode;
 }
 
 class _WaveLayer {

@@ -24,7 +24,7 @@ class FloatingCard extends StatefulWidget {
     this.margin,
     this.onTap,
     this.duration = const Duration(milliseconds: 4000),
-    this.amplitude = 2,
+    this.amplitude = 1,
   });
 
   @override

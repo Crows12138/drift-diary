@@ -23,6 +23,14 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDayMode = Theme.of(context).brightness == Brightness.light;
+
+    // Day: brighter frosted glass; Night: dark translucent glass
+    final effectiveOpacity = isDayMode ? opacity * 2.5 : opacity;
+    final borderColor = isDayMode
+        ? Colors.white.withOpacity(0.4)
+        : Colors.white.withOpacity(0.18);
+
     final card = ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
@@ -34,13 +42,11 @@ class GlassCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.white.withOpacity(opacity),
-                Colors.white.withOpacity(opacity * 0.33),
+                Colors.white.withOpacity(effectiveOpacity),
+                Colors.white.withOpacity(effectiveOpacity * 0.33),
               ],
             ),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.18),
-            ),
+            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(borderRadius),
           ),
           child: child,

@@ -22,3 +22,11 @@ flutter_app/build/
 # 系统文件
 .DS_Store
 Thumbs.db
+
+# 设计截图和参考图（根目录）
+/*.png
+/*.jpg
+/*.jpeg
+
+# Serena 配置
+.serena/

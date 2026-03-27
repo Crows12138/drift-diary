@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'theme/app_theme.dart';
 import 'providers/auth_provider.dart';
+import 'providers/theme_provider.dart';
 import 'pages/home_page.dart';
 import 'pages/write_page.dart';
 import 'pages/ai_result_page.dart';
@@ -56,13 +57,14 @@ class DriftDiaryApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final isDayMode = ref.watch(isDayModeProvider);
 
     // Trigger auto-login
     ref.watch(authProvider);
 
     return MaterialApp.router(
       title: 'AI日记漂流瓶',
-      theme: AppTheme.dark,
+      theme: isDayMode ? AppTheme.day : AppTheme.night,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );
@@ -86,20 +88,29 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
+    final isDayMode = Theme.of(context).brightness == Brightness.light;
     int currentIndex = 0;
     if (location.startsWith('/drift')) currentIndex = 1;
     if (location.startsWith('/mine')) currentIndex = 2;
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF0B1026).withOpacity(0.95),
+        color: isDayMode
+            ? AppTheme.dayIvory.withOpacity(0.92)
+            : AppTheme.nightBg.withOpacity(0.95),
         border: Border(
-          top: BorderSide(color: Colors.white.withOpacity(0.08)),
+          top: BorderSide(
+            color: isDayMode
+                ? Colors.black.withOpacity(0.06)
+                : Colors.white.withOpacity(0.08),
+          ),
         ),
       ),
       child: NavigationBar(
         backgroundColor: Colors.transparent,
-        indicatorColor: Colors.white.withOpacity(0.08),
+        indicatorColor: isDayMode
+            ? AppTheme.dayAccent.withOpacity(0.08)
+            : Colors.white.withOpacity(0.08),
         selectedIndex: currentIndex,
         onDestinationSelected: (i) {
           switch (i) {
