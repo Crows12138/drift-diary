@@ -19,19 +19,12 @@ class AuthNotifier extends StateNotifier<AuthStatus> {
     if (loggedIn) {
       state = AuthStatus.authenticated;
     } else {
-      // Auto dev-login for now
-      await login();
+      state = AuthStatus.unauthenticated;
     }
   }
 
-  Future<void> login() async {
-    state = AuthStatus.loading;
-    try {
-      await _authService.login();
-      state = AuthStatus.authenticated;
-    } catch (_) {
-      state = AuthStatus.unauthenticated;
-    }
+  void onLoggedIn() {
+    state = AuthStatus.authenticated;
   }
 
   Future<void> logout() async {

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,6 +38,29 @@ class ApiService {
   Dio get dio => _dio;
 
   // ─── Auth ───
+  Future<String> register({required String username, required String password, String? nickname}) async {
+    final resp = await _dio.post('/api/auth/register', data: {
+      'username': username,
+      'password': password,
+      if (nickname != null) 'nickname': nickname,
+    });
+    final token = resp.data['access_token'] as String;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('access_token', token);
+    return token;
+  }
+
+  Future<String> login({required String username, required String password}) async {
+    final resp = await _dio.post('/api/auth/login', data: {
+      'username': username,
+      'password': password,
+    });
+    final token = resp.data['access_token'] as String;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('access_token', token);
+    return token;
+  }
+
   Future<String> devLogin({String testUserId = 'test_user_1'}) async {
     final resp = await _dio.post('/api/auth/dev-login', data: {
       'test_user_id': testUserId,

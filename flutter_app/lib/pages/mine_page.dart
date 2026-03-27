@@ -317,7 +317,6 @@ class MinePage extends ConsumerWidget {
             onPressed: () {
               Navigator.pop(ctx);
               ref.read(authProvider.notifier).logout();
-              ref.read(authProvider.notifier).login();
             },
             child: const Text('退出', style: TextStyle(color: Colors.red)),
           ),

@@ -12,6 +12,17 @@ class DevLoginRequest(BaseModel):
     test_user_id: str  # 测试用，如 "test_user_1"
 
 
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+    nickname: str | None = None
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"

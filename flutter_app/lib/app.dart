@@ -10,6 +10,7 @@ import 'pages/ai_result_page.dart';
 import 'pages/drift_page.dart';
 import 'pages/drift_detail_page.dart';
 import 'pages/mine_page.dart';
+import 'pages/login_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -58,9 +59,24 @@ class DriftDiaryApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final isDayMode = ref.watch(isDayModeProvider);
+    final authStatus = ref.watch(authProvider);
 
-    // Trigger auto-login
-    ref.watch(authProvider);
+    if (authStatus == AuthStatus.loading) {
+      return MaterialApp(
+        theme: isDayMode ? AppTheme.day : AppTheme.night,
+        debugShowCheckedModeBanner: false,
+        home: const Scaffold(body: Center(child: CircularProgressIndicator())),
+      );
+    }
+
+    if (authStatus == AuthStatus.unauthenticated) {
+      return MaterialApp(
+        title: 'AI日记漂流瓶',
+        theme: isDayMode ? AppTheme.day : AppTheme.night,
+        debugShowCheckedModeBanner: false,
+        home: const LoginPage(),
+      );
+    }
 
     return MaterialApp.router(
       title: 'AI日记漂流瓶',
