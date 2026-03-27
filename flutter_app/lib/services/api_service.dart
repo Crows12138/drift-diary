@@ -9,15 +9,7 @@ class ApiService {
   late final Dio _dio;
 
   ApiService._() {
-    // Web/iOS → localhost, Android emulator → 10.0.2.2
-    final String baseUrl;
-    if (kIsWeb) {
-      baseUrl = 'http://localhost:8000';
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      baseUrl = 'http://10.0.2.2:8000';
-    } else {
-      baseUrl = 'http://localhost:8000';
-    }
+    const baseUrl = 'https://drift-diary-api.onrender.com';
 
     _dio = Dio(BaseOptions(
       baseUrl: baseUrl,
