@@ -191,15 +191,9 @@ class AiResultPage extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Text('原文',
-                              style: TextStyle(
-                                  fontSize: 13, color: subtextColor)),
-                          const Spacer(),
-                          MoodBadge(mood: diary.moodTag, size: 22),
-                        ],
-                      ),
+                      Text('原文',
+                          style: TextStyle(
+                              fontSize: 13, color: subtextColor)),
                       const SizedBox(height: 10),
                       Text(
                         diary.content,
