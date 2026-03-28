@@ -67,8 +67,11 @@ class _WritePageState extends ConsumerState<WritePage> {
       }
     } catch (e) {
       if (mounted) {
+        final msg = e.toString().contains('Timeout')
+            ? '服务器正在唤醒，请再试一次'
+            : '提交失败: $e';
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('提交失败: $e')),
+          SnackBar(content: Text(msg)),
         );
         setState(() => _isSubmitting = false);
       }

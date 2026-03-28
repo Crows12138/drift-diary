@@ -56,6 +56,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       final detail = e.response?.data;
       if (detail is Map && detail['detail'] != null) {
         setState(() => _error = detail['detail'].toString());
+      } else if (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout) {
+        setState(() => _error = '服务器正在唤醒，请再试一次（首次访问需要约30秒）');
       } else {
         setState(() => _error = '网络错误，请稍后重试');
       }
