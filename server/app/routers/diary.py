@@ -5,26 +5,31 @@ from app.database import get_db
 from app.deps import get_current_user
 from app.models import Diary, DriftBottle, User
 from app.schemas import DiaryCreate, DiaryListResponse, DiaryResponse
+from app.services.ai_service import analyze_emotion
 
 router = APIRouter()
 
 
 @router.post("", response_model=DiaryResponse)
-def create_diary(
+async def create_diary(
     req: DiaryCreate,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    """创建日记。如果 type=drift，同时创建漂流瓶记录"""
+    """创建日记。自动AI分析情绪，如果 type=drift 同时创建漂流瓶"""
     if req.type not in ("private", "drift"):
         raise HTTPException(status_code=400, detail="type 必须是 private 或 drift")
+
+    # AI 分析情绪
+    ai_result = await analyze_emotion(req.content)
 
     diary = Diary(
         user_id=user.id,
         content=req.content,
-        mood_tag=req.mood_tag,
-        topic_tags=req.topic_tags,
+        mood_tag=ai_result.get("mood", req.mood_tag),
+        topic_tags=req.topic_tags or ai_result.get("keywords"),
         type=req.type,
+        ai_analysis=ai_result,
     )
     db.add(diary)
     db.flush()
