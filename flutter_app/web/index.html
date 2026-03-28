@@ -33,6 +33,16 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    // 禁用 Service Worker 缓存，避免更新后用户看到旧版本
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
