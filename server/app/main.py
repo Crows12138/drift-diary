@@ -1,11 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 from app.database import Base, engine
 from app.routers import ai, auth, diary, drift
 
 # 创建数据库表
 Base.metadata.create_all(bind=engine)
+
+# 迁移：给 users 表加 password_hash 列（如果不存在）
+with engine.connect() as conn:
+    try:
+        conn.execute(text("ALTER TABLE users ADD COLUMN password_hash VARCHAR(256)"))
+        conn.commit()
+    except Exception:
+        conn.rollback()  # 列已存在，忽略
 
 app = FastAPI(title="漂流日记 API", version="0.1.0")
 
